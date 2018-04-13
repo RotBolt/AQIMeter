@@ -8,20 +8,28 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Handler;
 import android.util.Log;
 
 import com.sage.thelimitbreaker.aqimeter.services.NotifyJobService;
+import com.sage.thelimitbreaker.aqimeter.services.OneShotJobService;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class AQIFetchUtil {
     private static final String TAG= AQIFetchUtil.class.getSimpleName();
     private static int JOB_ID=1;
+    private static int ONE_SHOT_ID=2;
     public static long INTERVAL=15*60*1000;
 
 
-
+    public static void scheduleOneShotJob(Context context){
+        Log.d(TAG, "scheduleOneShotJob: ");
+        ComponentName  componentName= new ComponentName(context, OneShotJobService.class);
+        JobInfo.Builder builder = new JobInfo.Builder(ONE_SHOT_ID,componentName);
+        builder.setMinimumLatency(1*60*1000);
+        JobScheduler scheduler = (JobScheduler)context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        scheduler.schedule(builder.build());
+    }
 
     public static void scheduleJob(Context context){
 
@@ -36,15 +44,8 @@ public class AQIFetchUtil {
 
         final JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         if(!hasServiceScheduled(scheduler)) {
-            Log.d(TAG, "scheduleJob: not running");
-            Handler handler = new Handler();
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    scheduler.schedule(builder.build());
-                }
-            };
-            handler.postDelayed(runnable,notifyInterval);
+            Log.d(TAG, "scheduleJob: not running . Reschedule");
+            scheduler.schedule(builder.build());
         }
 
     }

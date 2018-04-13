@@ -27,8 +27,18 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE"></service>
+        <service
+            android:name=".services.OneShotJobService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"></service>
 
         <activity android:name=".AQIFetchingActivity"></activity>
+        <receiver android:name=".MainActivity$BootBroadcastReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

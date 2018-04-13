@@ -99,7 +99,7 @@ public class SettingsDialog extends DialogFragment
                 scheduler.cancelAll();
                 if (doGenerateNotification(getActivity())) {
                     Log.d(TAG, "onClick: reSchedule");
-                    AQIFetchUtil.scheduleJob(getActivity());
+                    AQIFetchUtil.scheduleOneShotJob(getActivity());
                 }
                 break;
             case -2:

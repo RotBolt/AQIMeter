@@ -1,10 +1,14 @@
 package com.sage.thelimitbreaker.aqimeter;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
@@ -34,11 +38,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initFields();
-        AQIFetchUtil.scheduleJob(getApplicationContext());
+        String[] permissions = {
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.INTERNET
+        };
+        PermissionManager.askForPermission(
+                this,
+                permissions,
+                new PermissionManager.OnPermissionResultListener() {
+                    @Override
+                    public void onGranted(String permission) {
+                        Toast.makeText(MainActivity.this,"Great!!",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onDenied(String permission) {
+                        Toast.makeText(MainActivity.this,"Please grant permissions!!",Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        AQIFetchUtil.scheduleOneShotJob(getApplicationContext());
 
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        PermissionManager.onRequestPermissionsResult(requestCode,permissions,grantResults);
+    }
 
     private void initFields(){
         fabLoading=findViewById(R.id.fabLoading);
@@ -108,6 +134,15 @@ public class MainActivity extends AppCompatActivity {
                     editor.apply();
                 }
             }
+        }
+    }
+
+    public class BootBroadcastReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context,"AQI Service Scheduling",Toast.LENGTH_SHORT).show();
+            AQIFetchUtil.scheduleOneShotJob(context);
         }
     }
 

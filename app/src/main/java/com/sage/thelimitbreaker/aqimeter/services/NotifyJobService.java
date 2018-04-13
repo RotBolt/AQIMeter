@@ -39,7 +39,7 @@ public class NotifyJobService extends JobService {
         if(AQIFetchUtil.isConnectedToNetwork(getApplicationContext())) {
            getAQIInfo();
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -78,6 +78,7 @@ public class NotifyJobService extends JobService {
         }
 
         notificationManager.notify(NOTIFY_ID,builder.build());
+
     }
 
     private void getAQIInfo(){
