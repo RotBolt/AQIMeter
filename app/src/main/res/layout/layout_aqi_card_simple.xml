@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@color/colorWhite"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="7sp"
+    android:orientation="vertical">
+    <LinearLayout
+        android:padding="10sp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/aqiHeader"
+            android:text="AQI"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:fontFamily="monospace"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/aqiValue"
+            android:text="AQI value"
+            android:textSize="21sp"
+            android:textStyle="normal"
+            android:fontFamily="monospace"
+            android:layout_weight="4"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/aqiStatus"
+        android:text="aqi_status"
+        android:textSize="21sp"
+        android:padding="10sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>
