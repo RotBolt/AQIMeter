@@ -44,7 +44,7 @@ public class NotifyJobService extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters params) {
-        return true;
+        return false;
     }
 
     private void generateNotification(int aqi , String sportRecommendation){
@@ -93,10 +93,18 @@ public class NotifyJobService extends JobService {
                 Log.d(TAG, "onResponse: ");
                 if (response.body() != null) {
                     StringBuilder sb = new StringBuilder();
+                    SharedPreferences pref= MySharedPref.getMySharedPrefInstance(getApplicationContext()).getSharedPrefInstance();
                     int aqi = response.body().getCountry_aqi();
+                    String desc = response.body().getCountry_description();
                     String sports = response.body().getRandom_recommendations().getSport();
                     String health=response.body().getRandom_recommendations().getHealth();
-                    SharedPreferences pref= MySharedPref.getMySharedPrefInstance(getApplicationContext()).getSharedPrefInstance();
+
+                    SharedPreferences.Editor editor= pref.edit();
+                    editor.putInt(Constants.AQI_VALUE,aqi);
+                    editor.putString(Constants.AQI_STATUS,desc);
+                    editor.putString(Constants.TIMESTAMP,AQIFetchUtil.getTimeStamp());
+                    editor.apply();
+
                     if(pref.getBoolean(Constants.NOTIFY_SPORT,false))
                         sb.append("Sport : "+sports+"\n\n");
                     if(pref.getBoolean(Constants.NOTIFY_HEALTH,false)){

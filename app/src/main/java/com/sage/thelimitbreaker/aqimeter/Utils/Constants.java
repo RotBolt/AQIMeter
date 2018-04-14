@@ -13,4 +13,5 @@ public class Constants {
     public static final String AQI_VALUE="aqi_value";
     public static final String AQI_STATUS="aqi_status";
     public static final String AQI_LESS_200="aqi_less_200";
+    public static final String TIMESTAMP="timestamp";
 }

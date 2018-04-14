@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,10 +28,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG=MainActivity.class.getSimpleName();
 
     private FloatingActionButton fabLoading;
-    private TextView aqiValue;
-    private TextView aqiStatus;
-    private TextView aqiHeader;
+    private TextView tvAqiValue;
+    private TextView tvAqiStatus;
+    private TextView tvAqiHeader;
     private ImageView ivOptions;
+    private TextView tvLastSyncHeader;
+    private TextView tvLastSyncedTime;
     private SharedPreferences preferences;
 
     @Override
@@ -40,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
         initFields();
         String[] permissions = {
                 Manifest.permission.ACCESS_NETWORK_STATE,
-                Manifest.permission.INTERNET
+                Manifest.permission.INTERNET,
+                Manifest.permission.RECEIVE_BOOT_COMPLETED,
+                Manifest.permission.REBOOT
         };
         PermissionManager.askForPermission(
                 this,
@@ -68,22 +73,32 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFields(){
         fabLoading=findViewById(R.id.fabLoading);
-        aqiValue=findViewById(R.id.aqiValue);
-        aqiHeader=findViewById(R.id.aqiHeader);
-        aqiStatus=findViewById(R.id.aqiStatus);
+        tvAqiValue =findViewById(R.id.aqiValue);
+        tvAqiHeader =findViewById(R.id.aqiHeader);
+        tvAqiStatus =findViewById(R.id.aqiStatus);
         ivOptions=findViewById(R.id.ivOptions);
+        tvLastSyncedTime=findViewById(R.id.tvLastSyncedTime);
+        tvLastSyncHeader=findViewById(R.id.tvLastSyncHeader);
+
         preferences=MySharedPref.getMySharedPrefInstance(this).getSharedPrefInstance();
         int aqiVal=preferences.getInt(Constants.AQI_VALUE,-1);
         String desc=preferences.getString(Constants.AQI_STATUS,null);
+        String timeStamp=preferences.getString(Constants.TIMESTAMP,null);
         if(aqiVal==-1){
-            aqiHeader.setVisibility(View.GONE);
-            aqiValue.setVisibility(View.GONE);
-            aqiStatus.setText("No last time sync");
+            tvLastSyncedTime.setVisibility(View.GONE);
+            tvAqiHeader.setVisibility(View.GONE);
+            tvAqiValue.setVisibility(View.GONE);
+            tvLastSyncHeader.setVisibility(View.GONE);
+            tvAqiStatus.setText("No last time sync");
         }else{
-            aqiValue.setVisibility(View.VISIBLE);
-            aqiHeader.setVisibility(View.VISIBLE);
-            aqiValue.setText(String.valueOf(aqiVal));
-            aqiStatus.setText(desc);
+            tvLastSyncHeader.setVisibility(View.VISIBLE);
+            tvLastSyncedTime.setVisibility(View.VISIBLE);
+            tvAqiValue.setVisibility(View.VISIBLE);
+            tvAqiHeader.setVisibility(View.VISIBLE);
+            tvAqiValue.setText(String.valueOf(aqiVal));
+            tvAqiStatus.setText(desc);
+            tvLastSyncedTime.setText(timeStamp);
+
 
         }
         fabLoading.setOnClickListener(new View.OnClickListener() {
@@ -120,30 +135,37 @@ public class MainActivity extends AppCompatActivity {
                 int aqi = data.getIntExtra("aqi",-1);
                 String desc=data.getStringExtra("desc");
                 if(aqi==-1){
-                    aqiHeader.setVisibility(View.GONE);
-                    aqiValue.setVisibility(View.GONE);
-                    aqiStatus.setText("Some problem in fetching ;(");
+                    tvAqiHeader.setVisibility(View.GONE);
+                    tvAqiValue.setVisibility(View.GONE);
+                    tvAqiStatus.setText("Some problem in fetching ;(");
                 }else{
-                    aqiHeader.setVisibility(View.VISIBLE);
-                    aqiValue.setVisibility(View.VISIBLE);
-                    aqiValue.setText(String.valueOf(aqi));
-                    aqiStatus.setText(desc);
+                    tvAqiHeader.setVisibility(View.VISIBLE);
+                    tvAqiValue.setVisibility(View.VISIBLE);
+                    tvLastSyncedTime.setVisibility(View.VISIBLE);
+                    tvAqiValue.setText(String.valueOf(aqi));
+                    tvAqiStatus.setText(desc);
+                    String timeStamp = AQIFetchUtil.getTimeStamp();
+                    tvLastSyncedTime.setText(timeStamp);
                     SharedPreferences.Editor editor=preferences.edit();
                     editor.putInt(Constants.AQI_VALUE,aqi);
                     editor.putString(Constants.AQI_STATUS,desc);
+                    editor.putString(Constants.TIMESTAMP,timeStamp);
                     editor.apply();
                 }
             }
         }
     }
 
-    public class BootBroadcastReceiver extends BroadcastReceiver{
+    public static class BootBroadcastReceiver extends BroadcastReceiver{
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive: ");
             Toast.makeText(context,"AQI Service Scheduling",Toast.LENGTH_SHORT).show();
             AQIFetchUtil.scheduleOneShotJob(context);
         }
     }
+
+
 
 }

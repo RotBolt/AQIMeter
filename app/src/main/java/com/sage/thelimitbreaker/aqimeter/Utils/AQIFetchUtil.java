@@ -13,6 +13,8 @@ import android.util.Log;
 import com.sage.thelimitbreaker.aqimeter.services.NotifyJobService;
 import com.sage.thelimitbreaker.aqimeter.services.OneShotJobService;
 
+import java.util.Calendar;
+
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class AQIFetchUtil {
@@ -89,5 +91,20 @@ public class AQIFetchUtil {
             }
         }
         return false;
+    }
+
+    public static String getTimeStamp(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+        int date = calendar.get(Calendar.DAY_OF_MONTH);
+        int month=calendar.get(Calendar.MONTH);
+        int year=calendar.get(Calendar.YEAR);
+
+        int hour=calendar.get(Calendar.HOUR_OF_DAY);
+        int min=calendar.get(Calendar.MINUTE);
+
+        String timeStamp = String.format("%02d/%02d/%02d, %02d:%02d",date,month,year,hour,min);
+        return timeStamp;
     }
 }

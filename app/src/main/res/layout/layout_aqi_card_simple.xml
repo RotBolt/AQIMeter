@@ -27,7 +27,7 @@
             android:textSize="21sp"
             android:textStyle="normal"
             android:fontFamily="monospace"
-            android:layout_weight="4"
+            android:layout_weight="5.8"
             android:layout_width="0sp"
             android:layout_height="wrap_content" />
 
@@ -38,6 +38,22 @@
         android:text="aqi_status"
         android:textSize="21sp"
         android:padding="10sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvLastSyncHeader"
+        android:padding="3sp"
+        android:text="Last Synced"
+        android:gravity="right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:padding="3sp"
+        android:id="@+id/tvLastSyncedTime"
+        android:text="timestamp"
+        android:gravity="right"
+        android:textSize="16sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
