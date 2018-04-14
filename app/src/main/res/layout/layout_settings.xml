@@ -86,5 +86,27 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+    <LinearLayout
+        android:padding="7sp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+
+            android:padding="2sp"
+            android:text="@string/LessThan200"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_weight="2.5"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content" />
+        <Switch
+            android:id="@+id/aqi200Switch"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

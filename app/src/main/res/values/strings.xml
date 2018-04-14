@@ -3,4 +3,5 @@
     <string name="breezo_api_key">ca5f05e18ece44619cdaa36d3f371e3f</string>
     <string name="OK">Ok</string>
     <string name="Cancel">Cancel</string>
+    <string name="LessThan200">Receive Notification when AQI less than 200</string>
 </resources>

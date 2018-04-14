@@ -29,9 +29,11 @@ public class SettingsDialog extends DialogFragment
     private SharedPreferences preferences;
     private Switch sportSwitch;
     private Switch healthSwitch;
+    private Switch aqi200Switch;
     private int updatedInterval = 0;
     private boolean sportNotify = false;
     private boolean healthNotify = false;
+    private boolean isAQILess200=false;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -49,7 +51,9 @@ public class SettingsDialog extends DialogFragment
         seekBarValue = view.findViewById(R.id.seekBarValue);
         sportSwitch = view.findViewById(R.id.sportSwitch);
         healthSwitch = view.findViewById(R.id.healthSwitch);
+        aqi200Switch=view.findViewById(R.id.aqi200Switch);
 
+        aqi200Switch.setOnCheckedChangeListener(this);
         sportSwitch.setOnCheckedChangeListener(this);
         healthSwitch.setOnCheckedChangeListener(this);
 
@@ -75,10 +79,11 @@ public class SettingsDialog extends DialogFragment
 
             }
         });
+        healthNotify=preferences.getBoolean(Constants.NOTIFY_HEALTH,false);
+        sportNotify=preferences.getBoolean(Constants.NOTIFY_SPORT,false);
+        isAQILess200=preferences.getBoolean(Constants.AQI_LESS_200,false);
 
-        boolean healthNotify=preferences.getBoolean(Constants.NOTIFY_HEALTH,false);
-        boolean sportNotify=preferences.getBoolean(Constants.NOTIFY_SPORT,false);
-
+        aqi200Switch.setChecked(isAQILess200);
         sportSwitch.setChecked(sportNotify);
         healthSwitch.setChecked(healthNotify);
 
@@ -93,6 +98,7 @@ public class SettingsDialog extends DialogFragment
                 editor.putInt(Constants.NOTIFY_INTERVAL, updatedInterval);
                 editor.putBoolean(Constants.NOTIFY_SPORT, sportNotify);
                 editor.putBoolean(Constants.NOTIFY_HEALTH, healthNotify);
+                editor.putBoolean(Constants.AQI_LESS_200,isAQILess200);
                 editor.apply();
 
                 JobScheduler scheduler = (JobScheduler) getActivity().getSystemService(Context.JOB_SCHEDULER_SERVICE);
@@ -148,7 +154,9 @@ public class SettingsDialog extends DialogFragment
                 Log.d(TAG, "onCheckedChanged: health");
                 healthNotify = isChecked;
                 break;
-
+            case R.id.aqi200Switch:
+                isAQILess200=isChecked;
+                break;
         }
     }
 }

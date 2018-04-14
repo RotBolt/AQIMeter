@@ -102,13 +102,21 @@ public class NotifyJobService extends JobService {
                     if(pref.getBoolean(Constants.NOTIFY_HEALTH,false)){
                         sb.append("Health : "+health);
                     }
-                    generateNotification(aqi, sb.toString());
+                    if(pref.getBoolean(Constants.AQI_LESS_200,false)){
+                        if(aqi<=200){
+                            generateNotification(aqi, sb.toString());
+                        }else{
+                            Log.d(TAG, "onResponse: More than 200 aqi");
+                        }
+                    }else {
+                        generateNotification(aqi, sb.toString());
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<AirQualityObject> call, Throwable t) {
-                Log.d(TAG, "onFailure: ");
+                Log.d(TAG, "onFailure: "+t.toString());
             }
         });
     }
