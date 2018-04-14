@@ -1,6 +1,7 @@
 package com.sage.thelimitbreaker.aqimeter.services;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -58,6 +59,7 @@ public class NotifyJobService extends JobService {
                 .setContentText(sportRecommendation)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(sportRecommendation))
                 .setContentIntent(pendingIntent)
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 

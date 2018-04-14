@@ -38,7 +38,8 @@ class AQIFetchingActivity : AppCompatActivity() {
                 Constants.INDIAN_LONG
         ).enqueue(object : Callback<AirQualityObject>{
             override fun onFailure(call: Call<AirQualityObject>?, t: Throwable?) {
-                Log.d(TAG,"Err.......r")
+                Log.d(TAG,"Err.......r"+t.toString())
+                finishAfterTransition()
             }
 
             override fun onResponse(call: Call<AirQualityObject>?, response: Response<AirQualityObject>?) {

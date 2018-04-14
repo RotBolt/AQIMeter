@@ -53,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
                 new PermissionManager.OnPermissionResultListener() {
                     @Override
                     public void onGranted(String permission) {
-                        Toast.makeText(MainActivity.this,"Great!!",Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onGranted: "+permission);
                     }
 
                     @Override
                     public void onDenied(String permission) {
-                        Toast.makeText(MainActivity.this,"Please grant permissions!!",Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onDenied: "+permission);
                     }
                 }
         );
@@ -135,10 +135,13 @@ public class MainActivity extends AppCompatActivity {
                 int aqi = data.getIntExtra("aqi",-1);
                 String desc=data.getStringExtra("desc");
                 if(aqi==-1){
+                    tvLastSyncHeader.setVisibility(View.GONE);
+                    tvLastSyncedTime.setVisibility(View.GONE);
                     tvAqiHeader.setVisibility(View.GONE);
                     tvAqiValue.setVisibility(View.GONE);
-                    tvAqiStatus.setText("Some problem in fetching ;(");
+                    tvAqiStatus.setText("Some problem in fetching :(");
                 }else{
+                    tvLastSyncHeader.setVisibility(View.VISIBLE);
                     tvAqiHeader.setVisibility(View.VISIBLE);
                     tvAqiValue.setVisibility(View.VISIBLE);
                     tvLastSyncedTime.setVisibility(View.VISIBLE);
@@ -152,6 +155,12 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString(Constants.TIMESTAMP,timeStamp);
                     editor.apply();
                 }
+            }else{
+                tvLastSyncHeader.setVisibility(View.GONE);
+                tvLastSyncedTime.setVisibility(View.GONE);
+                tvAqiHeader.setVisibility(View.GONE);
+                tvAqiValue.setVisibility(View.GONE);
+                tvAqiStatus.setText("Some problem in fetching :(");
             }
         }
     }
