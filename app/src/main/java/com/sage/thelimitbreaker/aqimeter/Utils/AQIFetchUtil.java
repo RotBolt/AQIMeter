@@ -28,6 +28,9 @@ public class AQIFetchUtil {
         Log.d(TAG, "scheduleOneShotJob: ");
         ComponentName  componentName= new ComponentName(context, OneShotJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(ONE_SHOT_ID,componentName);
+
+        // minimum latency and periodic don't go well . Dono me Katti hui hai
+        // That's why different scheduling Jobs.
         builder.setMinimumLatency(1*60*1000);
         JobScheduler scheduler = (JobScheduler)context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         scheduler.schedule(builder.build());

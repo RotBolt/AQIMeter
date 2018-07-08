@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "onReceive: ");
             Toast.makeText(context,"AQI Service Scheduling",Toast.LENGTH_SHORT).show();
+            // to delay the first request to api by 1 hr
             AQIFetchUtil.scheduleOneShotJob(context);
         }
     }
