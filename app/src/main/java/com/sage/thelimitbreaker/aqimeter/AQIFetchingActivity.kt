@@ -44,7 +44,9 @@ class AQIFetchingActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<AirQualityObject>?, response: Response<AirQualityObject>?) {
                 Log.d(TAG,"Response")
+
                 val aqi = response?.body()?.country_aqi
+                Log.d(TAG,"Aqi $aqi  response $response body  ${response?.body()}  error ${response?.errorBody()}")
                 val desc=response?.body()?.country_description
                 val intent = Intent()
                 intent.putExtra("aqi",aqi)
